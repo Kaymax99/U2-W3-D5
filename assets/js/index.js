@@ -15,7 +15,7 @@ const getSongs = async function () {
                 songContainer.innerHTML =
                   songContainer.innerHTML +
                 `<div class="col-12 col-md-6 d-flex justify-content-center mb-4">
-                    <div class="card" style="background-image: url(${song.album.cover_big});">
+                    <div class="card" style="background-image: url(${song.album.cover_big})">
                             <div class="card-body d-flex align-items-center flex-column justify-content-between">
                                 <h3 class="card-title shadowWht">${song.title}</h3>
                                 <h5 class="card-title shadowWht">${song.album.title}</h5>
@@ -32,34 +32,57 @@ const getSongs = async function () {
                 </div>
                     `;
               });
-              let favSongContainer = document.getElementById("favSongContainer");
-              favSongContainer.innerHTML =
-              favSongContainer.innerHTML + 
-              `<div class="card mb-3 px-0 col-12">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                        <img src="${prevailSongs[0].album.cover_big}" class="img-fluid rounded">
-                            </div>
-                            <div class="col-md-8 d-flex justify-content-center align-items-center">
-                                <div class="text-center d-flex flex-column">
-                                    <h5 class="card-title">${prevailSongs[0].title}</h5>
-                                    <figure>
-                                    <audio class="songPreview"
-                                        controls
-                                        src="${prevailSongs[0].preview}">
-                                    </audio>
-                                </figure>
-                                <a href="${prevailSongs[0].link}" target="_blank" class="btn btn-secondary">To song</a>
-                            </div>
+
+            let favSongContainer = document.getElementById("favSongContainer");
+            favSongContainer.innerHTML =
+            favSongContainer.innerHTML + 
+            `<div class="card mb-3 px-0 col-12">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img src="${prevailSongs[0].album.cover_big}" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-8 d-flex justify-content-center align-items-center">
+                            <div class="text-center d-flex flex-column">
+                                <h5 class="card-title">${prevailSongs[0].title}</h5>
+                                <figure>
+                                <audio class="songPreview"
+                                    controls
+                                    src="${prevailSongs[0].preview}">
+                                </audio>
+                            </figure>
+                            <a href="${prevailSongs[0].link}" target="_blank" class="btn btn-secondary">To song</a>
                         </div>
                     </div>
-                </div>`
+                </div>
+            </div>`;
 
-        } 
+            const carouselAlbums = prevailSongs.slice(0,3);
+            let carouselContainer = document.getElementById("carouselContainer");
+            carouselAlbums.forEach((song) => {
+            carouselContainer.innerHTML =
+            carouselContainer.innerHTML + 
+            `<div class="carousel-item">
+                <div class="carousel-pic" style="background-image: url(${song.album.cover_big})" "></div>
+                <img src="">
+                <a
+                href=""
+                >
+                    <div class="carousel-caption d-md-block">
+                        <h1 class="shadowWht">${song.album.title}</h1>
+                    </div>
+                </a>
+            </div> 
+            `
+            })
+            let test = document.querySelector(".carousel-item")
+            test.classList.add("active")
+
     }
-    catch (error) {
+    }catch (error) {
         console.log(error)
     }
 };
 
-getSongs()
+window.onload = getSongs()
+
+const findTop = document.getElementById("findHighest")
