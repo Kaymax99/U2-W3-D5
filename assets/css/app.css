@@ -13470,8 +13470,14 @@ body {
 nav {
   background-color: #3D5A6C;
 }
+nav img {
+  background-color: white;
+  border-radius: 25px;
+}
 
-.nav-link, .nav-item, .btn {
+.nav-link,
+.nav-item,
+.btn {
   color: white;
 }
 
@@ -13484,6 +13490,10 @@ body {
 
 #songContainer {
   color: white;
+}
+
+.alert {
+  display: none;
 }
 
 .songPreview {

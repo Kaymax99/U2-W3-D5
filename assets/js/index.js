@@ -34,7 +34,7 @@ const favSongs = async function (url) {
       `<div class="col-12 col-md-6 d-flex justify-content-center mb-4">
                 <div class="card" style="background-image: url(${song.album.cover_big})">
                         <div class="card-body d-flex align-items-center flex-column justify-content-between">
-                            <h3 class="card-title shadowWht">${song.title}</h3>
+                            <h3 class="card-title shadowWht" songrank="${song.rank}">${song.title}</h3>
                             <h5 class="card-title shadowWht">${song.album.title}</h5>
                             <div class="text-center mt-2">
                             <figure>
@@ -54,7 +54,7 @@ const favSongs = async function (url) {
 const drawFavSong = async function () {
   let favSongString = sessionStorage.getItem("favsong");
   let favSong = JSON.parse(favSongString);
-  console.log(favSong);
+  /* console.log(favSong); */
   let favSongContainer = document.getElementById("favSongContainer");
   favSongContainer.innerHTML =
     favSongContainer.innerHTML +
@@ -65,7 +65,7 @@ const drawFavSong = async function () {
                         </div>
                         <div class="col-md-8 d-flex justify-content-center align-items-center">
                             <div class="text-center d-flex flex-column">
-                                <h5 class="card-title">${favSong[0].title} - ${favSong[0].artist.name}</h5>
+                                <h6 class="card-title">${favSong[0].title} - ${favSong[0].artist.name}</h6>
                                 <figure>
                                 <audio class="songPreview"
                                     controls
@@ -81,9 +81,11 @@ const drawFavSong = async function () {
 
 class AlbumCopy {
   constructor(target) {
-    this.title = target.album.title;
+    this.albumTitle = target.album.title;
+    this.title = target.title;
     this.artist = target.artist.name;
     this.cover = target.album.cover_big;
+    this.rank = target.rank;
   }
 }
 
@@ -91,12 +93,15 @@ const albumArray = [];
 
 const getAlbums = async function (url) {
   let albums = await getSongsByQuery(url);
-  albumArray.push(new AlbumCopy(albums[0]));
+  /* console.log(albums); */
+  albumArray.push(new AlbumCopy(albums[2]));
   drawAlbums(albumArray);
 };
 const drawAlbums = function (givenArray) {
   let carouselContainer = document.getElementById("carouselContainer");
   if (givenArray.length === 3) {
+    /* console.log(givenArray); */
+    albumArray.reverse();
     for (let i = 0; i < givenArray.length; i++) {
       if (i > 0) {
         carouselItem = `
@@ -104,8 +109,8 @@ const drawAlbums = function (givenArray) {
                   <div class="carousel-pic" style="background-image: url(${givenArray[i].cover})" "></div>
                       <img src="">
                       <div class="carousel-caption d-md-block">
-                          <h3 class="shadowWht">${givenArray[i].artist}</h3>
-                          <h5 class="shadowWht">${givenArray[i].title}</h5>
+                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title}</h3>
+                          <h5 class="shadowWht">${givenArray[i].artist}</h5>
                       </div>
                   </a>
               </div> 
@@ -116,8 +121,8 @@ const drawAlbums = function (givenArray) {
                   <div class="carousel-pic" style="background-image: url(${givenArray[i].cover})" "></div>
                       <img src="">
                       <div class="carousel-caption d-md-block">
-                          <h3 class="shadowWht">${givenArray[i].artist}</h3>
-                          <h5 class="shadowWht">${givenArray[i].title}</h5>
+                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title}</h3>
+                          <h5 class="shadowWht">${givenArray[i].artist}</h5>
                       </div>
                   </a>
               </div> 
@@ -128,11 +133,34 @@ const drawAlbums = function (givenArray) {
   }
 };
 
-/* const findTop = document.getElementById("findHighest"); */
+const arrayRanks = () => {
+  let h6 = document.querySelectorAll("h3");
+  let titles = [];
+  h6.forEach((element) => {
+    titles.push({
+      title: element.innerText,
+      rank: Number(element.getAttribute("songrank")),
+    });
+  });
+  return titles;
+};
+
+const rankedTitles = () => {
+  let songs = arrayRanks();
+  let sortedSongs = songs.sort((a, b) => {
+    return a.rank - b.rank;
+  });
+
+  /*   let alert = document.querySelector(".alert");
+  alert.innerHTML = "";
+  sortedSongs.forEach((song) => {
+    alert.innerHTML += `<li class="list-group-item">
+    ${song.title} - ${song.rank}`;
+  }); */
+};
 
 window.onload = favSongs(favSongsUrl);
 window.onload = drawFavSong();
 for (let i = 0; i < albumsUrl.length; i++) {
   getAlbums(albumsUrl[i]);
 }
-console.log(albumArray);

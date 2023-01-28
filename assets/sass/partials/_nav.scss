@@ -1,6 +1,12 @@
 nav {
-    background-color: $primary;
+  background-color: $primary;
+  img {
+    background-color: white;
+    border-radius: 25px;
+  }
 }
-.nav-link, .nav-item, .btn {
-    color: white;
+.nav-link,
+.nav-item,
+.btn {
+  color: white;
 }
