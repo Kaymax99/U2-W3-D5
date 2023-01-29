@@ -13482,6 +13482,15 @@ nav img {
   color: white;
 }
 
+.navbar-toggler {
+  border: 1px solid white !important;
+}
+
+.bi-list {
+  font-size: 2em;
+  color: white;
+}
+
 body {
   background-image: url(../../../assets/img/background.jpg);
   background-size: cover;
@@ -13509,6 +13518,9 @@ body {
 .card-body {
   padding: 3em;
   padding-top: 5em;
+}
+.card-body h3, .card-body .h3 {
+  font-size: 1.3em;
 }
 
 .shadowWht {
@@ -13733,4 +13745,18 @@ footer p {
   text-align: right;
 }
 
-/*#endregion Alert*//*# sourceMappingURL=app.css.map */
+/*#endregion Alert*/
+@media screen and (max-width: 500px) {
+  figure {
+    display: none;
+  }
+  .card {
+    width: 80vw;
+  }
+  #buttons {
+    display: block !important;
+  }
+  #buttons #findHighest {
+    margin: 0 !important;
+  }
+}/*# sourceMappingURL=app.css.map */

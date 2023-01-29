@@ -20,7 +20,7 @@ const getSongsByQuery = async function (url) {
 const favSongs = async function (url) {
   let songs = await getSongsByQuery(url);
   const prevailSongs = songs.slice(0, 19);
-  /* console.log(prevailSongs); */
+  console.log(prevailSongs);
   const favSong = prevailSongs.slice(0, 1);
   /* console.log(favSong); */
   sessionStorage.setItem("favsong", JSON.stringify(favSong));
@@ -34,8 +34,8 @@ const favSongs = async function (url) {
       `<div class="col-12 col-md-6 d-flex justify-content-center mb-4">
                 <div class="card" style="background-image: url(${song.album.cover_big})">
                         <div class="card-body d-flex align-items-center flex-column justify-content-between">
-                            <h3 class="card-title shadowWht" songrank="${song.rank}">${song.title}</h3>
-                            <h5 class="card-title shadowWht">${song.album.title}</h5>
+                            <h3 class="card-title shadowWht" songrank="${song.rank}">${song.title} - ${song.album.title}</h3>
+                            <h5 class="card-title shadowWht">${favSong[0].artist.name}</h5>
                             <div class="text-center mt-2">
                             <figure>
                                 <audio class="songPreview"
@@ -65,7 +65,7 @@ const drawFavSong = async function () {
                         </div>
                         <div class="col-md-8 d-flex justify-content-center align-items-center">
                             <div class="text-center d-flex flex-column">
-                                <h6 class="card-title">${favSong[0].title} - ${favSong[0].artist.name}</h6>
+                                <h1 class="card-title">${favSong[0].title} - ${favSong[0].artist.name}</h1>
                                 <figure>
                                 <audio class="songPreview"
                                     controls
@@ -109,8 +109,8 @@ const drawAlbums = function (givenArray) {
                   <div class="carousel-pic" style="background-image: url(${givenArray[i].cover})" "></div>
                       <img src="">
                       <div class="carousel-caption d-md-block">
-                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title}</h3>
-                          <h5 class="shadowWht">${givenArray[i].artist}</h5>
+                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title} - ${givenArray[i].albumTitle}</h3>
+                          <h4 class="shadowWht">${givenArray[i].artist}</h4>
                       </div>
                   </a>
               </div> 
@@ -121,8 +121,8 @@ const drawAlbums = function (givenArray) {
                   <div class="carousel-pic" style="background-image: url(${givenArray[i].cover})" "></div>
                       <img src="">
                       <div class="carousel-caption d-md-block">
-                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title}</h3>
-                          <h5 class="shadowWht">${givenArray[i].artist}</h5>
+                          <h3 class="shadowWht" songrank="${givenArray[i].rank}">${givenArray[i].title} - ${givenArray[i].albumTitle}</h3>
+                          <h4 class="shadowWht">${givenArray[i].artist}</h4>
                       </div>
                   </a>
               </div> 
@@ -134,9 +134,9 @@ const drawAlbums = function (givenArray) {
 };
 
 const arrayRanks = () => {
-  let h6 = document.querySelectorAll("h3");
+  let h3 = document.querySelectorAll("h3");
   let titles = [];
-  h6.forEach((element) => {
+  h3.forEach((element) => {
     titles.push({
       title: element.innerText,
       rank: Number(element.getAttribute("songrank")),
@@ -155,7 +155,7 @@ const rankedTitles = () => {
   alert.innerHTML = "";
   sortedSongs.forEach((song) => {
     alert.innerHTML += `<li class="list-group-item">
-    ${song.title} - ${song.rank}`;
+    ${song.title} | ${song.rank}`;
   });
   return alert;
 };
@@ -165,40 +165,6 @@ window.onload = drawFavSong();
 for (let i = 0; i < albumsUrl.length; i++) {
   getAlbums(albumsUrl[i]);
 }
-
-/* function CustomAlert() {
-  this.alert = function (message) {
-    document.body.innerHTML =
-      document.body.innerHTML +
-      `<div id="dialogoverlay"></div>
-        <div id="dialogbox" class="slit-in-vertical">
-          <div>
-            <div id="dialogboxbody"></div>
-            <div id="dialogboxfoot"></div>
-          </div>
-        </div>`;
-
-    let dialogoverlay = document.getElementById("dialogoverlay");
-    let dialogbox = document.getElementById("dialogbox");
-
-    let winH = window.innerHeight;
-    dialogoverlay.style.height = winH + "px";
-
-    dialogbox.style.top = "100px";
-
-    dialogoverlay.style.display = "block";
-    dialogbox.style.display = "block";
-
-    document.getElementById("dialogboxbody").innerHTML = message;
-    document.getElementById("dialogboxfoot").innerHTML =
-      '<button class="pure-material-button-contained active" onclick="customAlert.ok()">OK</button>';
-  };
-
-  this.ok = function () {
-    document.getElementById("dialogbox").style.display = "none";
-    document.getElementById("dialogoverlay").style.display = "none";
-  };
-} */
 
 function CustomAlert() {
   this.alert = function (message, title) {
@@ -235,11 +201,34 @@ function CustomAlert() {
     document.getElementById("dialogoverlay").style.display = "none";
   };
 }
-
 let customAlert = new CustomAlert();
 
 const getAndPrintRanks = () => {
   rankedTitles();
   let alert = document.querySelector(".alert").innerHTML;
   customAlert.alert(alert);
+};
+
+const justTitles = () => {
+  let h3 = document.querySelectorAll("h3");
+  let titles = [];
+  h3.forEach((element) => {
+    titles.push({
+      title: element.innerText,
+    });
+  });
+  return titles;
+};
+
+const addSongsToModal = () => {
+  let titles = justTitles();
+  console.log(titles);
+  const modalTitle = document.getElementById("exampleModalLabel");
+  const modalBody = document.getElementById("modalBody");
+  modalTitle.innerText = "Here's all the songs and their albums";
+  modalBody.innerHTML = "";
+  titles.forEach((title) => {
+    modalBody.innerHTML += `<li class="list-group-item">
+  ${title.title}`;
+  });
 };

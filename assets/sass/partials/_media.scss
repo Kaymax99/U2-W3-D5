@@ -1,0 +1,14 @@
+@media screen and (max-width: 500px) {
+  figure {
+    display: none;
+  }
+  .card {
+    width: 80vw;
+  }
+  #buttons {
+    display: block !important;
+    #findHighest {
+      margin: 0 !important;
+    }
+  }
+}
